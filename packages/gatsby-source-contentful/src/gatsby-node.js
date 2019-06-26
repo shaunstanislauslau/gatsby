@@ -154,6 +154,21 @@ exports.sourceNodes = async (
 
   // Store our sync state for the next sync.
   const newState = {}
+  previousSyncData = previousSyncData || { entries: [], assets: [] }
+
+  // The order of result values is determined by the order they occur in the array
+  // we should keep currentSyncData first
+  previousSyncData.entries = _.uniqBy(
+    [...currentSyncData.entries, ...previousSyncData.entries],
+    `sys.id`
+  )
+
+  // The order of result values is determined by the order they occur in the array
+  previousSyncData.assets = _.uniqBy(
+    [...currentSyncData.entries, ...previousSyncData.entries],
+    `sys.id`
+  )
+
   newState[createStateKey()] = {
     nextSyncToken,
     previousSyncData: currentSyncData,
